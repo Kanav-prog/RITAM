@@ -13,6 +13,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    # Sentinel-2 / Copernicus Data Space
+    SENTINEL_CLIENT_ID: str = ""
+    SENTINEL_CLIENT_SECRET: str = ""
+    SENTINEL_TOKEN_URL: str = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
+    SENTINEL_BASE_URL: str = "https://sh.dataspace.copernicus.eu"
+
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()

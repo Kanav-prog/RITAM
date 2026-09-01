@@ -12,3 +12,5 @@ geoalchemy2
 shapely
 email-validator
 python-multipart
+
+sentinelhub==3.11.5

@@ -125,9 +125,9 @@ export default function NewProjectModal({ onClose, onAddProject }) {
               <Plus size={15} />
             </span>
             <div>
-              <h3 style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                Register New Project & Define Spatial Corridor
-              </h3>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                Register New Project & Define Environmental Boundary
+              </h2>
               <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>
                 PostGIS SRID 4326 GeoJSON Ingestion Pipeline
               </div>

@@ -23,7 +23,8 @@ class Settings(BaseSettings):
     # Satellite NDVI thresholds
     NDVI_VEGETATION_LOSS_THRESHOLD: float = -0.15
     NDVI_VEGETATION_GAIN_THRESHOLD: float = 0.15
-    NDVI_DEFAULT_MAX_CLOUD_COVER: float = 20.0
+    # Gemini AI Studio
+    GEMINI_API_KEY: str = ""
 
     model_config = SettingsConfigDict(env_file=".env")
 

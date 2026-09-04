@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import auth, projects, baselines, field, compliance, monitoring, actions, reports, satellite
+from app.api.v1.endpoints import auth, projects, baselines, field, compliance, monitoring, actions, reports, satellite, ai
 
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
@@ -12,3 +12,4 @@ api_router.include_router(monitoring.router, prefix="/monitoring", tags=["monito
 api_router.include_router(actions.router, prefix="/actions", tags=["actions"])
 api_router.include_router(reports.router, prefix="/reports", tags=["reports"])
 api_router.include_router(satellite.router, prefix="/satellite", tags=["satellite"])
+api_router.include_router(ai.router, prefix="/ai", tags=["ai"])

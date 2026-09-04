@@ -44,7 +44,7 @@ export default function ProjectsView({ projects, onSelectProject, onOpenProject,
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
             <span className="status-beacon emerald" />
             <h1 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-              Project Corridors & Spatial Baselines
+              Project Corridors & Ecological Baselines
             </h1>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>

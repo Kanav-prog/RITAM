@@ -42,6 +42,7 @@ frontend/.vite/
 .env.development
 .env.test
 .env.production
+!.env.example
 
 # IDE & Editor files
 .vscode/
@@ -59,3 +60,17 @@ Thumbs.db
 .gemini/
 *.log
 scratch/
+
+# Temporary test images & debug screenshots
+_*.png
+*_test_*.png
+tile_*.png
+backend_test_*.png
+backend/_*.png
+
+# Temporary test / audit reports & plans
+SATELLITE_*_REPORT.md
+SATELLITE_*_AUDIT.md
+TECHNICAL_AUDIT_*.md
+implementation_plan.md
+implmentation.md

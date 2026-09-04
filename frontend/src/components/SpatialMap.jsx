@@ -514,7 +514,7 @@ export default function SpatialMap({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span className="status-beacon emerald" style={{ width: '6px', height: '6px' }} />
-          <span style={{ color: '#ffffff', fontWeight: 700 }}>INDIA SPATIAL GRID</span>
+          <span style={{ color: '#ffffff', fontWeight: 700 }}>NATIONAL GIS GRID</span>
         </div>
 
         <span style={{ color: 'var(--text-dim)' }}>|</span>

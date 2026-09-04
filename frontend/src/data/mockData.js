@@ -5,7 +5,7 @@ export const PLATFORM_INFO = {
   fullName: 'Real-time Intelligence & Terrestrial Afforestation Monitoring',
   version: '2.4.0-PRO',
   constellation: 'Sentinel-2 L2A · PlanetScope 3m Ortho · High-Res Microplot Drone Array',
-  engineStatus: 'ONLINE · EPSG:4326 WGS84 · SPATIAL POSTGIS 16',
+  engineStatus: 'ONLINE · EPSG:4326 WGS84 · GEOSPATIAL POSTGIS 16',
   lastUpdated: '30 Aug 2026, 18:45 IST'
 };
 

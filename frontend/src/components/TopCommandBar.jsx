@@ -11,7 +11,7 @@ export default function TopCommandBar({ activeNav, searchQuery, onSearchChange, 
       case 'compensation': return 'Compensatory Afforestation & Tree Registry';
       case 'analytics': return 'Environmental Analytics & Net Accretion';
       case 'evidence': return 'Cryptographic Evidence Vault & Audit Trail';
-      case 'ask-ritam': return 'Ask RITAM — Spatial Environmental Copilot';
+      case 'ask-ritam': return 'Ask RITAM — Environmental AI Intelligence Copilot';
       default: return 'Environmental Intelligence';
     }
   };

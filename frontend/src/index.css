@@ -1,66 +1,72 @@
-@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Apple VisionOS Spatial Color Palette */
-  --bg-space: #03070d;
-  --bg-deep: #060a12;
-  
-  /* VisionOS Frosted Glass Materials */
-  --glass-bg: rgba(14, 22, 38, 0.48);
-  --glass-bg-elevated: rgba(20, 31, 52, 0.65);
-  --glass-bg-hover: rgba(30, 45, 72, 0.75);
-  --glass-bg-active: rgba(45, 65, 100, 0.85);
-  --glass-bg-capsule: rgba(10, 16, 28, 0.62);
+  /* Clean Professional Enterprise Dark Theme (ArcGIS / Planet / Copernicus standard) */
+  --bg-space: #090e17;
+  --bg-deep: #0f172a;
+  --bg-surface: #1e293b;
+  --bg-surface-elevated: #1e293b;
 
-  /* Specular Highlight Borders */
-  --glass-border: rgba(255, 255, 255, 0.14);
-  --glass-border-subtle: rgba(255, 255, 255, 0.08);
-  --glass-border-highlight: rgba(255, 255, 255, 0.28);
-  --glass-border-accent: rgba(56, 189, 248, 0.45);
-  --glass-border-emerald: rgba(52, 211, 153, 0.45);
-  --glass-border-rose: rgba(244, 63, 94, 0.45);
-  --glass-border-amber: rgba(251, 191, 36, 0.45);
+  /* Clean Solid & Translucent Card Materials */
+  --glass-bg: rgba(15, 23, 42, 0.94);
+  --glass-bg-elevated: #1e293b;
+  --glass-bg-hover: #334155;
+  --glass-bg-active: #475569;
+  --glass-bg-capsule: rgba(15, 23, 42, 0.96);
 
-  /* VisionOS Spatial Depth Shadows */
-  --spatial-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
-  --spatial-shadow-elevated: 0 24px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.28);
-  --spatial-shadow-capsule: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  /* Clean Crisp Borders */
+  --glass-border: #334155;
+  --glass-border-subtle: #1e293b;
+  --glass-border-highlight: #475569;
+  --glass-border-cyan: #0284c7;
+  --glass-border-emerald: #10b981;
+  --glass-border-amber: #f59e0b;
+  --glass-border-rose: #ef4444;
+  --glass-border-indigo: #6366f1;
+
+  /* Natural Clean Depth Shadows */
+  --spatial-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --spatial-shadow-elevated: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
 
   /* Typography */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.78);
-  --text-muted: rgba(255, 255, 255, 0.48);
-  --text-dim: rgba(255, 255, 255, 0.3);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
 
-  /* Functional Luminous Accents */
+  /* Natural Colors */
   --color-emerald: #10b981;
-  --color-emerald-glow: #34d399;
-  --color-emerald-bg: rgba(16, 185, 129, 0.16);
+  --color-emerald-glow: #10b981;
+  --color-emerald-bg: rgba(16, 185, 129, 0.12);
   
-  --color-cyan: #38bdf8;
-  --color-cyan-glow: #7dd3fc;
-  --color-cyan-bg: rgba(56, 189, 248, 0.16);
+  --color-cyan: #0ea5e9;
+  --color-cyan-glow: #38bdf8;
+  --color-cyan-bg: rgba(14, 165, 233, 0.12);
 
   --color-amber: #f59e0b;
-  --color-amber-bg: rgba(245, 158, 11, 0.16);
+  --color-amber-glow: #fbbf24;
+  --color-amber-bg: rgba(245, 158, 11, 0.12);
 
-  --color-rose: #f43f5e;
-  --color-rose-bg: rgba(244, 63, 94, 0.16);
+  --color-rose: #ef4444;
+  --color-rose-glow: #f87171;
+  --color-rose-bg: rgba(239, 68, 68, 0.12);
 
-  /* Font Families */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'SF Pro Display', 'Inter', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  --font-display: 'Plus Jakarta Sans', var(--font-sans);
+  --color-indigo: #6366f1;
+  --color-indigo-glow: #818cf8;
+  --color-indigo-bg: rgba(99, 102, 241, 0.12);
 
-  /* Continuous Apple Radii */
+  /* Standard Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Clean Modern Radii */
   --radius-capsule: 9999px;
-  --radius-window: 24px;
-  --radius-card: 16px;
-  --radius-control: 12px;
-  --radius-sm: 8px;
+  --radius-window: 12px;
+  --radius-card: 10px;
+  --radius-control: 8px;
+  --radius-sm: 6px;
 
-  /* VisionOS Blur Engine */
-  --spatial-blur: blur(36px) saturate(190%);
+  --spatial-blur: blur(12px);
 }
 
 * {
@@ -77,194 +83,143 @@ html, body, #root {
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* VisionOS Glass Panel Class */
-.spatial-glass {
+/* Clean Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090e17;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Card Classes */
+.geo-hud-card {
   background: var(--glass-bg);
   backdrop-filter: var(--spatial-blur);
-  -webkit-backdrop-filter: var(--spatial-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-card);
   box-shadow: var(--spatial-shadow);
-  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.spatial-glass-elevated {
+.geo-hud-card-elevated {
   background: var(--glass-bg-elevated);
-  backdrop-filter: var(--spatial-blur);
-  -webkit-backdrop-filter: var(--spatial-blur);
   border: 1px solid var(--glass-border-highlight);
   border-radius: var(--radius-window);
   box-shadow: var(--spatial-shadow-elevated);
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spatial-capsule {
-  background: var(--glass-bg-capsule);
-  backdrop-filter: var(--spatial-blur);
-  -webkit-backdrop-filter: var(--spatial-blur);
+.telemetry-pill {
+  background: rgba(15, 23, 42, 0.9);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-capsule);
-  box-shadow: var(--spatial-shadow-capsule);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-control);
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.spatial-capsule:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-highlight);
-  transform: scale(1.02);
-}
-
-/* Interactive Apple Gaze / Scale Hover */
-.gaze-target {
-  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.gaze-target:hover {
-  transform: scale(1.025);
-  box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-}
-
-/* Status Indicators with VisionOS Luminous Glow */
+/* Status Indicators */
 .status-beacon {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  position: relative;
 }
+.status-beacon.emerald { background-color: var(--color-emerald); }
+.status-beacon.cyan { background-color: var(--color-cyan); }
+.status-beacon.amber { background-color: var(--color-amber); }
+.status-beacon.rose { background-color: var(--color-rose); }
 
-.status-beacon.emerald {
-  background-color: var(--color-emerald-glow);
-  box-shadow: 0 0 12px var(--color-emerald-glow);
-}
-
-.status-beacon.emerald::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-emerald-glow);
-  animation: apple-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
-
-.status-beacon.amber {
-  background-color: var(--color-amber);
-  box-shadow: 0 0 12px var(--color-amber);
-}
-
-.status-beacon.rose {
-  background-color: var(--color-rose);
-  box-shadow: 0 0 12px var(--color-rose);
-}
-
-@keyframes apple-pulse {
-  0% { transform: scale(0.85); opacity: 0.9; }
-  70%, 100% { transform: scale(2.4); opacity: 0; }
-}
-
-/* Leaflet Container in Immersive Spatial Mode */
-.leaflet-container {
-  background: #03070d !important;
-  font-family: var(--font-sans) !important;
-  outline: none;
-}
-
-.leaflet-control-zoom, .leaflet-control-attribution {
-  display: none !important;
-}
-
-/* Apple Spatial Node Marker */
-.spatial-marker-node {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.spatial-marker-ring {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-emerald-glow);
-  background: rgba(16, 185, 129, 0.2);
-  animation: spatial-sonar 3.2s infinite ease-out;
-}
-
-.spatial-marker-core {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid var(--color-emerald-glow);
-  box-shadow: 0 0 14px var(--color-emerald-glow);
-  z-index: 2;
-  transition: transform 0.2s ease;
-}
-
-.spatial-marker-node:hover .spatial-marker-core {
-  transform: scale(1.3);
-}
-
-.spatial-marker-label {
-  position: absolute;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(10, 16, 28, 0.85);
-  border: 1px solid var(--glass-border-highlight);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: var(--radius-capsule);
-  white-space: nowrap;
-  pointer-events: none;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.2);
-}
-
-@keyframes spatial-sonar {
-  0% { transform: scale(0.6); opacity: 0.9; }
-  100% { transform: scale(2.5); opacity: 0; }
-}
-
-/* Custom Scrollbar for VisionOS Glass Panels */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-capsule);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.32);
-}
-
-button {
-  font-family: inherit;
+/* Interactive Hover */
+.interactive-hover {
+  transition: all 0.15s ease;
   cursor: pointer;
-  border: none;
-  outline: none;
-  background: transparent;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.interactive-hover:hover {
+  background: #1e293b;
+  border-color: var(--glass-border-highlight);
 }
 
-button:active {
-  transform: scale(0.96);
+/* Clean Buttons */
+.btn-primary {
+  background: #10b981;
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn-primary:hover {
+  background: #059669;
+}
+
+.btn-secondary {
+  background: #1e293b;
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-control);
+  padding: 8px 14px;
+  font-weight: 500;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-secondary:hover {
+  background: #334155;
+  border-color: var(--glass-border-highlight);
+}
+
+/* Leaflet Container */
+.leaflet-container {
+  background-color: #090e17 !important;
+  font-family: var(--font-sans) !important;
+}
+.leaflet-bar {
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: var(--spatial-shadow) !important;
+}
+.leaflet-bar a {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+.leaflet-bar a:hover {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  box-shadow: var(--spatial-shadow-elevated) !important;
+}
+.leaflet-popup-tip {
+  background: #0f172a !important;
 }

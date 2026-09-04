@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+pydantic
+pydantic-settings
+python-dotenv
+alembic
+bcrypt
+python-jose[cryptography]
+geoalchemy2
+shapely
+email-validator
+python-multipart
+
+sentinelhub==3.11.5

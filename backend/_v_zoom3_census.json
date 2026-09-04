@@ -1,0 +1,269 @@
+{
+ "total": 52,
+ "IMAGE": 29,
+ "BLACK": 10,
+ "mostlyBlack": 13,
+ "TRANSPARENT": 0,
+ "list": [
+  {
+   "key": "z6/x47/y29",
+   "kind": "BLACK",
+   "blackPct": 90
+  },
+  {
+   "key": "z6/x48/y26",
+   "kind": "mostlyBlack",
+   "blackPct": 32
+  },
+  {
+   "key": "z6/x48/y29",
+   "kind": "IMAGE",
+   "blackPct": 26
+  },
+  {
+   "key": "z6/x44/y27",
+   "kind": "mostlyBlack",
+   "blackPct": 49
+  },
+  {
+   "key": "z6/x49/y27",
+   "kind": "mostlyBlack",
+   "blackPct": 58
+  },
+  {
+   "key": "z6/x44/y28",
+   "kind": "mostlyBlack",
+   "blackPct": 44
+  },
+  {
+   "key": "z6/x46/y30",
+   "kind": "mostlyBlack",
+   "blackPct": 31
+  },
+  {
+   "key": "z6/x47/y30",
+   "kind": "BLACK",
+   "blackPct": 100
+  },
+  {
+   "key": "z6/x44/y26",
+   "kind": "IMAGE",
+   "blackPct": 0
+  },
+  {
+   "key": "z6/x49/y26",
+   "kind": "mostlyBlack",
+   "blackPct": 36
+  },
+  {
+   "key": "z6/x44/y29",
+   "kind": "BLACK",
+   "blackPct": 80
+  },
+  {
+   "key": "z6/x44/y25",
+   "kind": "IMAGE",
+   "blackPct": 2
+  },
+  {
+   "key": "z6/x49/y25",
+   "kind": "IMAGE",
+   "blackPct": 18
+  },
+  {
+   "key": "z6/x43/y28",
+   "kind": "BLACK",
+   "blackPct": 99
+  },
+  {
+   "key": "z6/x49/y30",
+   "kind": "IMAGE",
+   "blackPct": 20
+  },
+  {
+   "key": "z6/x46/y31",
+   "kind": "BLACK",
+   "blackPct": 96
+  },
+  {
+   "key": "z6/x44/y24",
+   "kind": "IMAGE",
+   "blackPct": 1
+  },
+  {
+   "key": "z6/x50/y30",
+   "kind": "IMAGE",
+   "blackPct": 15
+  },
+  {
+   "key": "z6/x46/y32",
+   "kind": "BLACK",
+   "blackPct": 100
+  },
+  {
+   "key": "z6/x47/y32",
+   "kind": "BLACK",
+   "blackPct": 100
+  },
+  {
+   "key": "z6/x45/y23",
+   "kind": "IMAGE",
+   "blackPct": 4
+  },
+  {
+   "key": "z6/x42/y26",
+   "kind": "IMAGE",
+   "blackPct": 0
+  },
+  {
+   "key": "z6/x51/y29",
+   "kind": "mostlyBlack",
+   "blackPct": 40
+  },
+  {
+   "key": "z6/x45/y32",
+   "kind": "mostlyBlack",
+   "blackPct": 51
+  },
+  {
+   "key": "z6/x48/y32",
+   "kind": "BLACK",
+   "blackPct": 100
+  },
+  {
+   "key": "z6/x50/y24",
+   "kind": "IMAGE",
+   "blackPct": 1
+  },
+  {
+   "key": "z6/x50/y31",
+   "kind": "IMAGE",
+   "blackPct": 14
+  },
+  {
+   "key": "z6/x44/y23",
+   "kind": "IMAGE",
+   "blackPct": 0
+  },
+  {
+   "key": "z6/x51/y30",
+   "kind": "IMAGE",
+   "blackPct": 10
+  },
+  {
+   "key": "z6/x49/y32",
+   "kind": "mostlyBlack",
+   "blackPct": 57
+  },
+  {
+   "key": "z6/x46/y22",
+   "kind": "IMAGE",
+   "blackPct": 9
+  },
+  {
+   "key": "z6/x42/y24",
+   "kind": "IMAGE",
+   "blackPct": 2
+  },
+  {
+   "key": "z6/x51/y24",
+   "kind": "IMAGE",
+   "blackPct": 3
+  },
+  {
+   "key": "z6/x52/y26",
+   "kind": "IMAGE",
+   "blackPct": 15
+  },
+  {
+   "key": "z6/x41/y29",
+   "kind": "IMAGE",
+   "blackPct": 4
+  },
+  {
+   "key": "z6/x52/y29",
+   "kind": "IMAGE",
+   "blackPct": 21
+  },
+  {
+   "key": "z6/x48/y33",
+   "kind": "BLACK",
+   "blackPct": 100
+  },
+  {
+   "key": "z6/x52/y25",
+   "kind": "IMAGE",
+   "blackPct": 4
+  },
+  {
+   "key": "z6/x42/y32",
+   "kind": "BLACK",
+   "blackPct": 91
+  },
+  {
+   "key": "z6/x51/y32",
+   "kind": "IMAGE",
+   "blackPct": 11
+  },
+  {
+   "key": "z6/x53/y28",
+   "kind": "IMAGE",
+   "blackPct": 10
+  },
+  {
+   "key": "z6/x50/y33",
+   "kind": "mostlyBlack",
+   "blackPct": 69
+  },
+  {
+   "key": "z6/x40/y26",
+   "kind": "IMAGE",
+   "blackPct": 5
+  },
+  {
+   "key": "z6/x53/y29",
+   "kind": "IMAGE",
+   "blackPct": 15
+  },
+  {
+   "key": "z6/x40/y25",
+   "kind": "IMAGE",
+   "blackPct": 0
+  },
+  {
+   "key": "z6/x53/y25",
+   "kind": "IMAGE",
+   "blackPct": 28
+  },
+  {
+   "key": "z6/x40/y30",
+   "kind": "IMAGE",
+   "blackPct": 2
+  },
+  {
+   "key": "z6/x41/y22",
+   "kind": "IMAGE",
+   "blackPct": 0
+  },
+  {
+   "key": "z6/x41/y33",
+   "kind": "mostlyBlack",
+   "blackPct": 67
+  },
+  {
+   "key": "z6/x52/y33",
+   "kind": "mostlyBlack",
+   "blackPct": 39
+  },
+  {
+   "key": "z6/x40/y22",
+   "kind": "IMAGE",
+   "blackPct": 3
+  },
+  {
+   "key": "z6/x40/y33",
+   "kind": "mostlyBlack",
+   "blackPct": 62
+  }
+ ]
+}

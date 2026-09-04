@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Clean Professional Enterprise Dark Theme (ArcGIS / Planet / Copernicus standard) */
+  --bg-space: #090e17;
+  --bg-deep: #0f172a;
+  --bg-surface: #1e293b;
+  --bg-surface-elevated: #1e293b;
+
+  /* Clean Solid & Translucent Card Materials */
+  --glass-bg: rgba(15, 23, 42, 0.94);
+  --glass-bg-elevated: #1e293b;
+  --glass-bg-hover: #334155;
+  --glass-bg-active: #475569;
+  --glass-bg-capsule: rgba(15, 23, 42, 0.96);
+
+  /* Clean Crisp Borders */
+  --glass-border: #334155;
+  --glass-border-subtle: #1e293b;
+  --glass-border-highlight: #475569;
+  --glass-border-cyan: #0284c7;
+  --glass-border-emerald: #10b981;
+  --glass-border-amber: #f59e0b;
+  --glass-border-rose: #ef4444;
+  --glass-border-indigo: #6366f1;
+
+  /* Natural Clean Depth Shadows */
+  --spatial-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --spatial-shadow-elevated: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+
+  /* Typography */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Natural Colors */
+  --color-emerald: #10b981;
+  --color-emerald-glow: #10b981;
+  --color-emerald-bg: rgba(16, 185, 129, 0.12);
+  
+  --color-cyan: #0ea5e9;
+  --color-cyan-glow: #38bdf8;
+  --color-cyan-bg: rgba(14, 165, 233, 0.12);
+
+  --color-amber: #f59e0b;
+  --color-amber-glow: #fbbf24;
+  --color-amber-bg: rgba(245, 158, 11, 0.12);
+
+  --color-rose: #ef4444;
+  --color-rose-glow: #f87171;
+  --color-rose-bg: rgba(239, 68, 68, 0.12);
+
+  --color-indigo: #6366f1;
+  --color-indigo-glow: #818cf8;
+  --color-indigo-bg: rgba(99, 102, 241, 0.12);
+
+  /* Standard Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Clean Modern Radii */
+  --radius-capsule: 9999px;
+  --radius-window: 12px;
+  --radius-card: 10px;
+  --radius-control: 8px;
+  --radius-sm: 6px;
+
+  --spatial-blur: blur(12px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-space);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Clean Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090e17;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Card Classes */
+.geo-hud-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--spatial-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--spatial-shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.geo-hud-card-elevated {
+  background: var(--glass-bg-elevated);
+  border: 1px solid var(--glass-border-highlight);
+  border-radius: var(--radius-window);
+  box-shadow: var(--spatial-shadow-elevated);
+}
+
+.telemetry-pill {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-control);
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Status Indicators */
+.status-beacon {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.status-beacon.emerald { background-color: var(--color-emerald); }
+.status-beacon.cyan { background-color: var(--color-cyan); }
+.status-beacon.amber { background-color: var(--color-amber); }
+.status-beacon.rose { background-color: var(--color-rose); }
+
+/* Interactive Hover */
+.interactive-hover {
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.interactive-hover:hover {
+  background: #1e293b;
+  border-color: var(--glass-border-highlight);
+}
+
+/* Clean Buttons */
+.btn-primary {
+  background: #10b981;
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn-primary:hover {
+  background: #059669;
+}
+
+.btn-secondary {
+  background: #1e293b;
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-control);
+  padding: 8px 14px;
+  font-weight: 500;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-secondary:hover {
+  background: #334155;
+  border-color: var(--glass-border-highlight);
+}
+
+/* Leaflet Container */
+.leaflet-container {
+  background-color: #090e17 !important;
+  font-family: var(--font-sans) !important;
+}
+.leaflet-bar {
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: var(--spatial-shadow) !important;
+}
+.leaflet-bar a {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+.leaflet-bar a:hover {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  box-shadow: var(--spatial-shadow-elevated) !important;
+}
+.leaflet-popup-tip {
+  background: #0f172a !important;
+}

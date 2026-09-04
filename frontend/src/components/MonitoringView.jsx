@@ -12,15 +12,33 @@ import {
   Sparkles,
   Send,
   Check,
-  X
+  X,
+  Satellite
 } from 'lucide-react';
 import { ENVIRONMENTAL_CHANGES, PROJECTS } from '../data/mockData';
+import SatelliteMonitoring from './SatelliteMonitoring';
 
-export default function MonitoringView({ onSelectChange, onPanToLocation }) {
+/**
+ * MonitoringView Component
+ *
+ * IMPORTANT ARCHITECTURE NOTE:
+ * - Change events list: Uses DEMO/MOCK data for UI demonstration
+ * - Satellite Monitoring panel: Makes REAL API calls to Sentinel Hub backend
+ * - Before/After comparison: Uses REAL API data from SatelliteMonitoring component
+ * - NDVI values displayed here are DEMO values clearly labeled as such
+ *
+ * The real satellite data flow is:
+ * SatelliteMonitoring → Backend API → Sentinel Hub → Copernicus Data Space → Sentinel-2 L2A
+ */
+export default function MonitoringView({ onSelectChange, onPanToLocation, selectedProject }) {
   const [changes, setChanges] = useState(ENVIRONMENTAL_CHANGES);
   const [selectedChange, setSelectedChange] = useState(changes[0]);
   const [sliderPos, setSliderPos] = useState(50);
   const [actionSuccess, setActionSuccess] = useState(null);
+  const [showSatellite, setShowSatellite] = useState(true);
+  const [comparisonData, setComparisonData] = useState(null);
+  const [comparisonLoading, setComparisonLoading] = useState(false);
+  const [comparisonError, setComparisonError] = useState(null);
 
   const handleTriageAction = (type) => {
     setActionSuccess(`Action recorded: ${type} dispatched for ${selectedChange.id}. Cryptographic audit log updated.`);
@@ -46,24 +64,24 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
             </h1>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-            Continuous Sentinel-2 L2A & PlanetScope 3m multispectral anomaly detection and mitigation workflow engine.
+            Satellite change detection & mitigation workflow engine. Change events below are demo data.
           </p>
         </div>
 
-        {/* Constellation Live Badge */}
+        {/* Demo Data Badge */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
           padding: '6px 12px',
           borderRadius: 'var(--radius-xs)',
-          backgroundColor: 'rgba(16, 185, 129, 0.08)',
-          border: '1px solid var(--border-emerald)',
+          backgroundColor: 'rgba(245, 158, 11, 0.08)',
+          border: '1px solid rgba(245, 158, 11, 0.3)',
           fontSize: '11px',
           fontFamily: 'var(--font-mono)'
         }}>
-          <Radio size={13} color="var(--color-emerald)" />
-          <span style={{ color: 'var(--color-emerald)', fontWeight: 700 }}>ORBITAL PIPELINE ACTIVE</span>
+          <Radio size={13} color="var(--color-amber)" />
+          <span style={{ color: 'var(--color-amber)', fontWeight: 700 }}>DEMO DATA — CHANGE EVENTS BELOW</span>
         </div>
       </div>
 
@@ -83,6 +101,42 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
           <CheckCircle2 size={16} />
           <span>{actionSuccess}</span>
         </div>
+      )}
+
+      {/* Real Sentinel-2 Satellite Monitoring Panel */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <button
+          onClick={() => setShowSatellite(!showSatellite)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 12px',
+            fontSize: '10px',
+            fontWeight: 700,
+            fontFamily: 'var(--font-mono)',
+            backgroundColor: showSatellite ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
+            border: showSatellite ? '1px solid var(--border-accent)' : '1px solid var(--border-subtle)',
+            color: showSatellite ? 'var(--color-cyan)' : 'var(--text-muted)',
+            borderRadius: 'var(--radius-xs)',
+            cursor: 'pointer',
+          }}
+        >
+          <Satellite size={12} />
+          {showSatellite ? 'Hide' : 'Show'} Real Satellite Data
+        </button>
+        <span style={{ fontSize: '9px', color: 'var(--color-cyan)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+          REAL SENTINEL-2 DATA — FROM BACKEND API
+        </span>
+      </div>
+
+      {/* Real Satellite Monitoring Panel — Makes actual API calls to Sentinel Hub */}
+      {showSatellite && selectedProject && (
+        <SatelliteMonitoring
+          projectId={selectedProject.id}
+          projectName={selectedProject.name}
+          projectBoundary={selectedProject.boundary}
+        />
       )}
 
       {/* Main Split Grid: Left Triage Queue (40%) & Right Spectral Inspector (60%) */}
@@ -199,7 +253,7 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
               </div>
             </div>
 
-            {/* Interactive Before / After Spectral NDVI Comparison Simulation */}
+            {/* DEMO Before / After NDVI Comparison — Mock visualization for UI demonstration */}
             <div style={{
               height: '180px',
               borderRadius: 'var(--radius-sm)',
@@ -209,6 +263,24 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
               marginBottom: '14px',
               backgroundColor: '#050a12'
             }}>
+              {/* Demo Data Label */}
+              <div style={{
+                position: 'absolute',
+                top: '8px',
+                left: '8px',
+                zIndex: 20,
+                fontSize: '8px',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                color: 'var(--color-amber)',
+                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                padding: '2px 6px',
+                borderRadius: '3px'
+              }}>
+                DEMO DATA — NOT FROM REAL SENTINEL-2
+              </div>
+
               {/* Baseline Layer (Before) */}
               <div style={{
                 position: 'absolute',
@@ -221,9 +293,9 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
               }}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                    BASELINE SPECTRAL BAND (NDVI {selectedChange.ndviBefore || 0.72})
+                    DEMO BASELINE (NDVI {selectedChange.ndviBefore || 'N/A'})
                   </div>
-                  <div style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Sentinel-2 L2A Pre-Construction Canopy</div>
+                  <div style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Simulated pre-construction canopy — Use Satellite Panel for real data</div>
                 </div>
               </div>
 
@@ -246,9 +318,9 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
               }}>
                 <div style={{ minWidth: '320px', textAlign: 'center', color: selectedChange.type === 'LOSS' ? 'var(--color-rose)' : '#34d399' }}>
                   <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                    CURRENT ORTHOTILE (NDVI {selectedChange.ndviAfter || 0.35})
+                    DEMO CURRENT (NDVI {selectedChange.ndviAfter || 'N/A'})
                   </div>
-                  <div style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>30 Aug 2026 PlanetScope 3m Surface Reflectance</div>
+                  <div style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Simulated surface reflectance — Use Satellite Panel for real data</div>
                 </div>
               </div>
 
@@ -280,7 +352,7 @@ export default function MonitoringView({ onSelectChange, onPanToLocation }) {
               marginBottom: '14px'
             }}>
               <div style={{ padding: '8px 10px', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ color: 'var(--text-muted)', fontSize: '9.5px' }}>SENSOR PLATFORM</div>
+                <div style={{ color: 'var(--text-muted)', fontSize: '9.5px' }}>SENSOR PLATFORM (DEMO)</div>
                 <div style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>{selectedChange.sensor}</div>
               </div>
 

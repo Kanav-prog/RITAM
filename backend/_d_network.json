@@ -1,0 +1,22 @@
+{
+ "totalTileRequests": 77,
+ "failed": 0,
+ "byRequestedZ": {
+  "7": 58,
+  "12": 15,
+  "14": 4
+ },
+ "byStatus": {
+  "200": 77
+ },
+ "byCacheHeader": {
+  "MISS": 70,
+  "HIT": 7
+ },
+ "durMs": {
+  "count": 0,
+  "p50": null,
+  "p90": null,
+  "max": null
+ }
+}

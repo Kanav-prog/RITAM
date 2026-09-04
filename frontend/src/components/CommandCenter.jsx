@@ -4,15 +4,25 @@ import OverviewStats from './OverviewStats';
 import ProjectList from './ProjectList';
 import EnvironmentalChanges from './EnvironmentalChanges';
 import EvidenceDetailModal from './EvidenceDetailModal';
-import ProjectDetailModal from './ProjectDetailModal';
-
-export default function CommandCenter({ 
+import ProjectDetailModal from './ProjectDetailModal';export default function CommandCenter({ 
   projects,
   selectedProject, 
-  onSelectProject, 
+  onSelectProject,
   onOpenProject,
   highlightedCoords,
-  onPanToCoords
+  onPanToCoords,
+  sentinel2OverlayUrl,
+  sentinel2OverlayBounds,
+  showSentinel2Overlay,
+  onToggleSentinel2Overlay,
+  sentinel2OverlayOpacity,
+  onSentinel2OverlayOpacityChange,
+  trueColorOverlayUrl,
+  trueColorOverlayBounds,
+  trueColorOverlayOpacity,
+  onTrueColorOverlayOpacityChange,
+  trueColorError,
+  onRequestTrueColor
 }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [openDetailProject, setOpenDetailProject] = useState(null);
@@ -49,6 +59,18 @@ export default function CommandCenter({
           onSelectProject={onSelectProject}
           onOpenProject={handleOpenDetail}
           highlightedCoords={highlightedCoords}
+          sentinel2OverlayUrl={sentinel2OverlayUrl}
+          sentinel2OverlayBounds={sentinel2OverlayBounds}
+          showSentinel2Overlay={showSentinel2Overlay}
+          onToggleSentinel2Overlay={onToggleSentinel2Overlay}
+          sentinel2OverlayOpacity={sentinel2OverlayOpacity}
+          onSentinel2OverlayOpacityChange={onSentinel2OverlayOpacityChange}
+          trueColorOverlayUrl={trueColorOverlayUrl}
+          trueColorOverlayBounds={trueColorOverlayBounds}
+          trueColorOverlayOpacity={trueColorOverlayOpacity}
+          onTrueColorOverlayOpacityChange={onTrueColorOverlayOpacityChange}
+          trueColorError={trueColorError}
+          onRequestTrueColor={onRequestTrueColor}
         />
       </div>
 

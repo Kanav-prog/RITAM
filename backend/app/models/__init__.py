@@ -8,3 +8,4 @@ from .mitigation_action import MitigationAction, ActionStatus
 from .tree_identity import TreeIdentity, TreeStatus
 from .evidence_record import EvidenceRecord
 from .audit_log import AuditLog
+from .satellite_scene import SatelliteScene

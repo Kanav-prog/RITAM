@@ -17,9 +17,29 @@ class ProjectCreate(BaseModel):
     
 @router.get("/")
 async def list_projects(db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
-    result = await db.execute(select(Project).filter(Project.organization_id == current_user.organization_id))
-    projects = result.scalars().all()
-    return projects
+    result = await db.execute(
+        select(
+            Project.id,
+            Project.name,
+            Project.description,
+            Project.status,
+            Project.organization_id,
+            Project.area_hectares,
+            func.ST_AsGeoJSON(Project.boundary).label("boundary"),
+        ).filter(Project.organization_id == current_user.organization_id)
+    )
+    return [
+        {
+            "id": str(row.id),
+            "name": row.name,
+            "description": row.description,
+            "status": row.status.value if row.status else None,
+            "organization_id": str(row.organization_id) if row.organization_id else None,
+            "area_hectares": row.area_hectares,
+            "boundary": json.loads(row.boundary) if row.boundary else None,
+        }
+        for row in result
+    ]
 
 @router.post("/")
 async def create_project(project_in: ProjectCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):

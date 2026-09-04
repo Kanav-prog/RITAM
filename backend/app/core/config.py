@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     SENTINEL_CLIENT_SECRET: str = ""
     SENTINEL_TOKEN_URL: str = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
     SENTINEL_BASE_URL: str = "https://sh.dataspace.copernicus.eu"
+    SENTINEL_EVALSCRIPT_URL: str = "https://services.sentinel-hub.com/ogc/wms/bd86bcc0-f318-402b-a145-015f85b9427e"
+
+    # Satellite NDVI thresholds
+    NDVI_VEGETATION_LOSS_THRESHOLD: float = -0.15
+    NDVI_VEGETATION_GAIN_THRESHOLD: float = 0.15
+    NDVI_DEFAULT_MAX_CLOUD_COVER: float = 20.0
 
     model_config = SettingsConfigDict(env_file=".env")
 

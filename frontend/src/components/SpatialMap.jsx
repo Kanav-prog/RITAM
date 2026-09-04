@@ -9,29 +9,57 @@ import {
   CheckSquare, 
   Square,
   MapPin,
-  Compass
+  Compass,
+  Satellite
 } from 'lucide-react';
 import ProjectInfoPanel from './ProjectInfoPanel';
+import { apiClient, getSentinelTileUrl } from '../api/client';
+import SentinelOverviewTileLayer from './SentinelOverviewTileLayer';
 
-// India Geographic Bounding Box (Locked to India Territory)
-const INDIA_BOUNDS = [
-  [6.5, 68.0],   // South-West (Kanyakumari / Arabian Sea)
-  [35.8, 97.5]   // North-East (Kashmir / Arunachal Pradesh)
-];
+// India bounding box for the "Fit India" control
+const INDIA_BOUNDS = [[6.5, 68.0], [35.5, 97.5]];
 
+
+/**
+ * SpatialMap Component
+ *
+ * Map layers (clearly separated):
+ * 1. SENTINEL-2 TRUE COLOR: primary imagery from the backend API
+ * 2. SENTINEL-2 OVERLAY: NDVI visualization from backend API (when loaded)
+ * 3. PROJECT BOUNDARY: GeoJSON polygon from database/mock
+ * 4. CHANGE ZONES: Red (loss) / Green (gain) polygons from ChangeEvent
+ * 5. TREE MARKERS: Individual tree locations from TreeIdentity
+ *
+ * The basemap is NEVER presented as Sentinel-2 imagery.
+ * Sentinel-2 data is a separate overlay layer loaded from the backend API.
+ */
 export default function SpatialMap({ 
   projects = [],
   selectedProject, 
-  onSelectProject, 
+  onSelectProject,
   onOpenProject,
-  highlightedCoords
+  highlightedCoords,
+  // Sentinel-2 NDVI overlay
+  sentinel2OverlayUrl = null,
+  sentinel2OverlayBounds = null,
+  showSentinel2Overlay = false,
+  onToggleSentinel2Overlay,
+  sentinel2OverlayOpacity = 0.7,
+  onSentinel2OverlayOpacityChange,
+  // Sentinel-2 True Color overlay
+  trueColorOverlayUrl = null,
+  trueColorOverlayBounds = null,
+  trueColorOverlayOpacity = 0.8,
+  onTrueColorOverlayOpacityChange,
+  trueColorError = null,
+  onRequestTrueColor
 }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const layersGroupRef = useRef({});
+  const sentinelTileLayerRef = useRef(null);
 
   // Map Controls State
-  const [mapMode, setMapMode] = useState('satellite'); // 'satellite' | 'dark'
   const [showLayersPanel, setShowLayersPanel] = useState(true);
   const [currentZoom, setCurrentZoom] = useState(6);
   const [selectedTree, setSelectedTree] = useState(null);
@@ -44,58 +72,33 @@ export default function SpatialMap({
     ecozone: true,
     vegetation: true,
     changeDetection: true,
-    plantation: true
+    plantation: true,
+    sentinel2: false,
   });
-
-  // Base Tile Layer Refs
-  const satelliteTileRef = useRef(null);
-  const labelsTileRef = useRef(null);
-  const darkTileRef = useRef(null);
 
   // Initialize Map Locked to India
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
 
-    // Create Leaflet Map centered over India with locked bounds
+    // Create Leaflet Map — globally navigable (no artificial bounds lock)
     const map = L.map(mapContainerRef.current, {
       center: [23.5, 78.5],
       zoom: 6,
-      minZoom: 5,
+      minZoom: 3,
       maxZoom: 19,
-      maxBounds: INDIA_BOUNDS,
-      maxBoundsViscosity: 0.9,
       zoomControl: false,
       attributionControl: false
     });
 
     mapInstanceRef.current = map;
+    // Dev/verification hook: lets CDP/automation drive exact zoom levels.
+    window.__RITAM_MAP__ = map;
+    console.log('[SatelliteDebug] map mounted');
 
     map.on('zoomend', () => {
       setCurrentZoom(map.getZoom());
     });
-
-    // Satellite Imagery Layer (Esri World Imagery Clarity)
-    satelliteTileRef.current = L.tileLayer(
-      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 19 }
-    );
-
-    // High Contrast Boundary/Labels Layer
-    labelsTileRef.current = L.tileLayer(
-      'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 19, opacity: 0.8 }
-    );
-
-    // Dark Basemap (CartoDB Dark Matter)
-    darkTileRef.current = L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-      { subdomains: 'abcd', maxZoom: 19 }
-    );
-
-    // Set initial basemap
-    satelliteTileRef.current.addTo(map);
-    labelsTileRef.current.addTo(map);
 
     // Initialize Spatial Layer Groups
     layersGroupRef.current = {
@@ -105,7 +108,8 @@ export default function SpatialMap({
       ecozone: L.layerGroup().addTo(map),
       vegetation: L.layerGroup().addTo(map),
       changeDetection: L.layerGroup().addTo(map),
-      plantation: L.layerGroup().addTo(map)
+      plantation: L.layerGroup().addTo(map),
+      sentinel2Overlay: L.layerGroup()
     };
 
     return () => {
@@ -114,33 +118,126 @@ export default function SpatialMap({
     };
   }, []);
 
-  // Update Basemap mode (Satellite vs Dark)
+  // ------------------------------------------------------------------
+  // SENTINEL-2 TILE LAYER — persistent, independent of project selection.
+  // Created once on mount; never destroyed/recreated when the project changes.
+  // Leaflet handles tile loading, dedup, caching, and cancellation.
+  // ------------------------------------------------------------------
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map) return;
+    if (!map || sentinelTileLayerRef.current) return;
 
-    if (mapMode === 'satellite') {
-      if (darkTileRef.current && map.hasLayer(darkTileRef.current)) {
-        map.removeLayer(darkTileRef.current);
+    // Use any available project for the URL template. The tile endpoint
+    // is public and the project_id only scopes the request — it does not
+    // filter imagery. If no project exists yet, defer creation.
+    const projectId = selectedProject?.id;
+    if (!projectId) return;
+
+    const tileUrl = getSentinelTileUrl(projectId, 30, 256);
+    // SentinelOverviewTileLayer is a normal L.tileLayer for zooms >= 7 and adds
+    // two safeguards on the z6 overview grid (all map zooms <= 6): it skips
+    // pure-ocean cells (no wasted Sentinel Hub render) and budgets how many
+    // land cells a single very-low-zoom viewport may fetch per navigation wave
+    // (center-first), so a world view no longer queues hundreds of renders and
+    // starves the visible centre.
+    const tileLayer = new SentinelOverviewTileLayer(tileUrl, {
+      opacity: trueColorOverlayOpacity,
+      minZoom: 2,
+      maxZoom: 18,
+      // Sentinel-2 native resolution ≈ 10 m ≈ zoom 14 at the equator.
+      // Beyond this, Leaflet reuses zoom-14 tiles (overzoom) instead of
+      // requesting the backend to upscale the same data.
+      maxNativeZoom: 14,
+      // Sentinel Hub's Process API only returns continuous Sentinel-2 mosaics
+      // for moderately small bboxes: measured no-data is ~0.3 % for z7 tiles
+      // (2.8°), ~24 % for z6 (5.6°), but 55–75 %+ for z5/z4 tiles.  Zoom 6 is
+      // therefore the coarsest grid that still yields real imagery over land.
+      // Below zoom 6 Leaflet loads z6 tiles (auto-scaled) so the India
+      // overview stays populated with a bounded tile count instead of fanning
+      // out hundreds of z7 requests per view.
+      minNativeZoom: 6,
+      zIndex: 1,
+      crossOrigin: true,
+      keepBuffer: 1,
+      // The backend ALWAYS returns a valid PNG (transparent fallback for
+      // no-data tiles), so no custom errorTileUrl or tileerror handler needed.
+    });
+
+    tileLayer.addTo(map);
+    sentinelTileLayerRef.current = tileLayer;
+    window.__RITAM_TILE_LAYER__ = tileLayer;
+
+    // Cleanup: remove the tile layer and clear the ref so that React
+    // StrictMode's double-mount cycle and any component remounts correctly
+    // recreate the layer on the new map instance.
+    return () => {
+      if (sentinelTileLayerRef.current) {
+        map.removeLayer(sentinelTileLayerRef.current);
+        sentinelTileLayerRef.current = null;
       }
-      if (satelliteTileRef.current && !map.hasLayer(satelliteTileRef.current)) {
-        satelliteTileRef.current.addTo(map);
-      }
-      if (labelsTileRef.current && !map.hasLayer(labelsTileRef.current)) {
-        labelsTileRef.current.addTo(map);
-      }
+    };
+  }, [selectedProject]);
+
+  // ------------------------------------------------------------------
+  // FIT PROJECT BOUNDARY — separate from tile layer lifecycle.
+  // When the selected project changes, pan/zoom to its extent.
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !selectedProject) return;
+
+    if (selectedProject.boundary && selectedProject.boundary.length >= 3) {
+      const bounds = L.latLngBounds(selectedProject.boundary);
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14, animate: false });
+    } else if (selectedProject.center) {
+      map.setView(selectedProject.center, selectedProject.zoom || 12, { animate: false });
+    }
+  }, [selectedProject?.id]);
+
+  // Update tile layer opacity without recreating it
+  useEffect(() => {
+    if (sentinelTileLayerRef.current) {
+      sentinelTileLayerRef.current.setOpacity(trueColorOverlayOpacity);
+    }
+  }, [trueColorOverlayOpacity]);
+
+  // Handle Sentinel-2 NDVI Overlay toggle
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    const group = layersGroupRef.current?.sentinel2Overlay;
+    if (!map || !group) return;
+
+    console.log('[SpatialMap] NDVI useEffect:', { showSentinel2Overlay, hasUrl: !!sentinel2OverlayUrl });
+
+    if (showSentinel2Overlay && sentinel2OverlayUrl) {
+      group.clearLayers();
+      
+      const bounds = sentinel2OverlayBounds || (
+        selectedProject?.center 
+          ? [
+              [selectedProject.center[0] - 0.05, selectedProject.center[1] - 0.05],
+              [selectedProject.center[0] + 0.05, selectedProject.center[1] + 0.05]
+            ]
+          : map.getBounds()
+      );
+      
+      console.log('[SpatialMap] Creating NDVI ImageOverlay with bounds:', bounds);
+
+      const sentinelOverlay = L.imageOverlay(
+        sentinel2OverlayUrl,
+        bounds,
+        { opacity: sentinel2OverlayOpacity, interactive: true }
+      );
+      group.addLayer(sentinelOverlay);
+      group.addTo(map);
+      console.log('[SpatialMap] NDVI overlay added to map');
     } else {
-      if (satelliteTileRef.current && map.hasLayer(satelliteTileRef.current)) {
-        map.removeLayer(satelliteTileRef.current);
-      }
-      if (labelsTileRef.current && map.hasLayer(labelsTileRef.current)) {
-        map.removeLayer(labelsTileRef.current);
-      }
-      if (darkTileRef.current && !map.hasLayer(darkTileRef.current)) {
-        darkTileRef.current.addTo(map);
+      if (map.hasLayer(group)) {
+        map.removeLayer(group);
+        console.log('[SpatialMap] NDVI overlay removed from map');
       }
     }
-  }, [mapMode]);
+  }, [showSentinel2Overlay, sentinel2OverlayUrl, sentinel2OverlayBounds, sentinel2OverlayOpacity]);
 
   // Render Vector Polygons, Cadastral Corners & Trees
   useEffect(() => {
@@ -716,46 +813,61 @@ export default function SpatialMap({
               </div>
               {activeLayers.changeDetection ? <CheckSquare size={15} color="var(--color-amber)" /> : <Square size={15} color="var(--text-muted)" />}
             </div>
+
+            {/* Sentinel-2 True Color is the automatic map imagery source. */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '11.5px',
+              color: trueColorOverlayUrl ? '#ffffff' : 'var(--text-muted)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Satellite size={12} color="var(--color-emerald)" />
+                <span>SENTINEL-2 SATELLITE IMAGERY</span>
+              </div>
+            </div>
+
+            {trueColorError && (
+              <div style={{ color: 'var(--color-rose)', fontSize: '10px' }}>{trueColorError}</div>
+            )}
+
+            {/* Opacity adjusts the loaded image only. */}
+            {trueColorOverlayUrl && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '20px' }}>
+                <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', minWidth: '50px' }}>OPACITY</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={Math.round(trueColorOverlayOpacity * 100)}
+                  onChange={(e) => {
+                    if (onTrueColorOverlayOpacityChange) {
+                      onTrueColorOverlayOpacityChange(Number(e.target.value) / 100);
+                    }
+                  }}
+                  style={{ flex: 1, accentColor: 'var(--color-emerald)', height: '4px' }}
+                />
+                <span style={{ fontSize: '9px', color: 'var(--color-emerald)', fontFamily: 'var(--font-mono)', minWidth: '30px' }}>
+                  {Math.round(trueColorOverlayOpacity * 100)}%
+                </span>
+              </div>
+            )}
+
+            {/* The NDVI analysis overlay is shown automatically only when
+                MonitoringView loads it — no manual satellite control exists. */}
           </div>
 
-          {/* Satellite vs Dark Basemap Capsule Switcher */}
+          {/* Imagery status: Sentinel-2 is the only map imagery source. */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '4px',
-            backgroundColor: 'rgba(0, 0, 0, 0.45)',
-            padding: '3px',
-            borderRadius: 'var(--radius-capsule)',
-            border: '1px solid var(--glass-border-subtle)'
+            padding: '7px 8px',
+            color: 'var(--color-emerald)',
+            fontSize: '10px',
+            fontFamily: 'var(--font-mono)',
+            textAlign: 'center',
+            borderTop: '1px solid var(--glass-border-subtle)'
           }}>
-            <button
-              onClick={() => setMapMode('satellite')}
-              style={{
-                padding: '5px 0',
-                fontSize: '11px',
-                fontWeight: 600,
-                borderRadius: 'var(--radius-capsule)',
-                backgroundColor: mapMode === 'satellite' ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-                color: mapMode === 'satellite' ? '#ffffff' : 'var(--text-muted)',
-                textAlign: 'center'
-              }}
-            >
-              Satellite
-            </button>
-            <button
-              onClick={() => setMapMode('dark')}
-              style={{
-                padding: '5px 0',
-                fontSize: '11px',
-                fontWeight: 600,
-                borderRadius: 'var(--radius-capsule)',
-                backgroundColor: mapMode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-                color: mapMode === 'dark' ? '#ffffff' : 'var(--text-muted)',
-                textAlign: 'center'
-              }}
-            >
-              Dark Map
-            </button>
+            SENTINEL-2 SATELLITE IMAGERY
           </div>
         </div>
       )}
